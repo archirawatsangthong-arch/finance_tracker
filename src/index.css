@@ -1,0 +1,195 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/noto-sans-thai';
+
+/* dark mode ควบคุมด้วย class .dark บน <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter Variable', 'Noto Sans Thai Variable', system-ui, sans-serif;
+  --color-income: #34d399;
+  --color-expense: #f87171;
+  --color-accent: #8b5cf6;
+  --color-accent-soft: #a78bfa;
+  --color-warn: #fbbf24;
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+}
+
+/* ===== Design tokens: Light ===== */
+:root {
+  --bg: #f5f5fa;
+  --fg: #12121a;
+  --muted: #565670;
+  --subtle: #8a8aa3;
+  --surface: rgb(255 255 255 / 0.65);
+  --surface-strong: rgb(255 255 255 / 0.9);
+  --line: rgb(18 18 26 / 0.08);
+  --glow: rgb(139 92 246 / 0.18);
+  --shadow: 0 10px 40px -12px rgb(60 40 120 / 0.18);
+  color-scheme: light;
+}
+
+/* โหมดสว่าง: ใช้เขียว/แดงเข้มขึ้นให้ contrast ผ่าน WCAG AA บนพื้นขาว */
+:root:not(.dark) {
+  --color-income: #047857;
+  --color-expense: #dc2626;
+  --color-accent-soft: #7c3aed;
+  --color-warn: #b45309;
+}
+
+/* ===== Design tokens: Dark (ค่าเริ่มต้น) ===== */
+.dark {
+  --bg: #0a0a0f;
+  --fg: #f4f4f8;
+  --muted: #a1a1b5;
+  --subtle: #8a8aa0;
+  --surface: rgb(255 255 255 / 0.045);
+  --surface-strong: rgb(22 22 32 / 0.92);
+  --line: rgb(255 255 255 / 0.08);
+  --glow: rgb(139 92 246 / 0.28);
+  --shadow: 0 10px 40px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* พื้นหลัง gradient ม่วง-น้ำเงิน อ่อน ๆ (ชั้นล่างสุดใต้ particles) */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(60rem 40rem at 10% -10%, rgb(139 92 246 / 0.18), transparent 60%),
+      radial-gradient(50rem 35rem at 110% 10%, rgb(59 130 246 / 0.14), transparent 60%),
+      radial-gradient(40rem 30rem at 50% 120%, rgb(236 72 153 / 0.08), transparent 60%);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent-soft);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  ::selection {
+    background: rgb(139 92 246 / 0.35);
+  }
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* การ์ดกระจก: โปร่งแสง + blur + ขอบบางเรืองแสง */
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow), inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+  .glass-strong {
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+  }
+  .glow-border {
+    box-shadow: var(--shadow), 0 0 0 1px var(--glow), 0 0 24px -6px var(--glow);
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1, 'cv11' 1;
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-fg placeholder:text-subtle transition outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/25;
+  }
+  .btn,
+  .btn-primary,
+  .btn-ghost,
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply bg-accent text-white shadow-lg shadow-accent/25 hover:bg-violet-500;
+  }
+  .btn-ghost {
+    @apply text-muted hover:bg-fg/5 hover:text-fg;
+  }
+  .btn-outline {
+    @apply border border-line hover:bg-fg/5 text-fg;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-medium text-muted transition hover:text-fg;
+  }
+  .chip[aria-pressed='true'],
+  .chip[aria-checked='true'] {
+    @apply border-accent/50 bg-accent/15 text-fg;
+  }
+  .label {
+    @apply text-xs font-medium text-muted;
+  }
+  .skeleton {
+    @apply rounded-xl bg-fg/[0.06];
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+}
+
+/* ฉาก 3D หน้า Landing: ไล่ขอบให้จางหาย กันเห็นกรอบสี่เหลี่ยมของ canvas เมื่อเปิด bloom */
+.scene-fade {
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+}
+
+/* หลังบ้าน: เปลี่ยน accent เป็นฟ้าไซแอน ให้รู้ว่าอยู่ในโหมดผู้ดูแล */
+.admin-theme {
+  --color-accent: #06b6d4;
+  --color-accent-soft: #67e8f9;
+  --glow: rgb(6 182 212 / 0.28);
+}
+:root:not(.dark) .admin-theme {
+  --color-accent: #0891b2;
+  --color-accent-soft: #0e7490;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ซ่อน scrollbar ของแถบเลื่อนแนวนอน */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Recharts: ปิดกรอบ focus สี่เหลี่ยมของ SVG */
+.recharts-wrapper svg:focus,
+.recharts-surface:focus {
+  outline: none;
+}

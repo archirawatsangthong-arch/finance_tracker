@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="th" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0A0A0F" />
+    <meta name="description" content="บันทึกรายรับรายจ่ายส่วนตัว ใช้งานออฟไลน์ได้" />
+    <title>Coinly — บันทึกรายรับรายจ่าย</title>
+    <script>
+      // ตั้งธีมก่อน render เพื่อไม่ให้หน้าจอกะพริบ
+      try {
+        const s = JSON.parse(localStorage.getItem('coinly-settings') || '{}');
+        if (s.state && s.state.theme === 'light') document.documentElement.classList.remove('dark');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

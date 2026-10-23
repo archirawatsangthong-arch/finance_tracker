@@ -1,0 +1,9 @@
+# ตั้งค่าสำหรับ Supabase CLI (ใช้ตอน deploy Edge Functions)
+# project_id ใช้เฉพาะการรันในเครื่อง — ตอน deploy ใช้ --project-ref แทน
+project_id = "coinly"
+
+[functions.delete-account]
+verify_jwt = true
+
+[functions.admin-users]
+verify_jwt = true
